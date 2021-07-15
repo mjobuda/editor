@@ -106,7 +106,7 @@ tag.setAttribute("id", "editor_lowered");
     neditor.setTheme("ace/theme/solarized-light");
     neditor.session.setMode("ace/mode/rust");
     neditor.setOptions({maxLines: 30,
-		fontFamily: "ubuntu",
+		fontFamily: "mono",
   fontSize: "12pt"});
     neditor.setValue( ccresult.lowered_ast);
       
@@ -128,7 +128,7 @@ tag.setAttribute("id", "editor_json_abi_"+key);
     neditor.setTheme("ace/theme/solarized-light");
     neditor.session.setMode("ace/mode/rust");
     neditor.setOptions({maxLines: 30,
-		fontFamily: "ubuntu",
+		fontFamily: "mono",
   fontSize: "12pt"});
     neditor.setValue( ccresult.contracts[key].json_abi );
         }  
@@ -150,7 +150,7 @@ tag.setAttribute("id", "editor_yul_"+key);
     neditor.setTheme("ace/theme/solarized-light");
     neditor.session.setMode("ace/mode/rust");
     neditor.setOptions({maxLines: 30,
-		fontFamily: "ubuntu",
+		fontFamily: "mono",
   fontSize: "12pt"});
     neditor.setValue( ccresult.contracts[key].yul );
         }
@@ -171,7 +171,7 @@ tag.setAttribute("id", "editor_bytecode_"+key);
    neditor.setTheme("ace/theme/solarized-light");
     neditor.session.setMode("ace/mode/rust");
     neditor.setOptions({maxLines: 30,
-		fontFamily: "ubuntu",
+		fontFamily: "mono",
   fontSize: "12pt"});
     neditor.setValue( ccresult.contracts[key].bytecode );
         }
@@ -187,7 +187,7 @@ tag.setAttribute("id", "editor_bytecode_"+key);
     editor.setTheme("ace/theme/solarized-light");
     editor.session.setMode("ace/mode/rust");
     editor.setOptions({maxLines: 30,
-		fontFamily: "ubuntu",
+		fontFamily: "mono",
   fontSize: "12pt"});
     console.log('halo');
     console.log(editor.getValue());
