@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>Editor</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+  <style type="text/css" media="screen">
+    body {
+        #overflow: hidden;
+    }
+
+    .editor {
+        height: 200px;
+    }
+  </style>
+</head>
+<body>
+
+<h2>Fe editor</h2>
+<pre id="editor">contract Foo:
+
+    pub def bar(input: u256) -> u256:
+        if input > 5:
+            return 1
+        else:
+            return 0
+</pre>
+
+
+
+<button type="button" id="compileButton" onclick="">compile</button>
+
+
+<div id="container"></div>
+<!--pre id="editor1">leer
+</pre>
+<pre id="editor2">nix
+</pre>
+
+<pre id="editor3">???
+</pre>
+
+<pre id="editor4">zero!!
+</pre -->
+
+
+
+<script src="src-noconflict/ace.js" type="text/javascript" charset="utf-8"></script>
+
+
+<!-- Include from a free CDN -->
+<script src="https://cdn.rawgit.com/caldwell/renderjson/master/renderjson.js"></script>
+
+
+<script type="module">
+      import init, { get_token, compile_to_ast, compile } from './pkg/fejs.js';
+
+
+      async function run() {
+   
+        await init('./pkg/fejs_bg.wasm');
+      }
+
+      
+      function aceCompile()
+    {
+		const container = document.getElementById("container");
+  container.innerHTML = '';
+  
+  
+  var tag = document.createElement("h3");
+      tag.innerHTML = 'compiler results:';
+      container.appendChild(tag);
+      container.appendChild(document.createElement("hr"));
+  
+  
+		const ast = compile_to_ast(window.editor.getValue());
+      console.log(ast);
+      
+      
+      
+      
+      var tag = document.createElement("h5");
+      tag.innerHTML = 'AST';
+      container.appendChild(tag);
+      container.appendChild(document.createElement("hr"));
+      container.appendChild(
+        renderjson(ast)
+    );
+      
+      const ccresult = compile(window.editor.getValue());
+      console.log(ccresult);  
+      
+      var tag = document.createElement("h5");
+      tag.innerHTML = 'lowered AST';
+      container.appendChild(tag);
+      
+      var tag = document.createElement("p");
+   
+tag.setAttribute("id", "editor_lowered");
+   
+    container.appendChild(document.createElement("hr"));
+    container.appendChild(tag);
+    var neditor = ace.edit("editor_lowered");
+    neditor.setTheme("ace/theme/solarized-light");
+    neditor.session.setMode("ace/mode/rust");
+    neditor.setOptions({maxLines: 30,
+		fontFamily: "ubuntu",
+  fontSize: "12pt"});
+    neditor.setValue( ccresult.lowered_ast);
+      
+      
+      for(var key in ccresult.contracts) { 
+		  
+		  
+		  var tag = document.createElement("h5");
+      tag.innerHTML = "json_abi for contract: "+key;
+      container.appendChild(tag);
+		  
+var tag = document.createElement("p");
+   
+tag.setAttribute("id", "editor_json_abi_"+key);
+   
+    container.appendChild(document.createElement("hr"));
+    container.appendChild(tag);
+    var neditor = ace.edit("editor_json_abi_"+key);
+    neditor.setTheme("ace/theme/solarized-light");
+    neditor.session.setMode("ace/mode/rust");
+    neditor.setOptions({maxLines: 30,
+		fontFamily: "ubuntu",
+  fontSize: "12pt"});
+    neditor.setValue( ccresult.contracts[key].json_abi );
+        }  
+      
+		
+		for(var key in ccresult.contracts) { 
+			
+			var tag = document.createElement("h5");
+      tag.innerHTML = "yul for contract: "+key;
+      container.appendChild(tag);
+			
+var tag = document.createElement("p");
+   
+tag.setAttribute("id", "editor_yul_"+key);
+   
+    container.appendChild(document.createElement("hr"));
+    container.appendChild(tag);
+    var neditor = ace.edit("editor_yul_"+key);
+    neditor.setTheme("ace/theme/solarized-light");
+    neditor.session.setMode("ace/mode/rust");
+    neditor.setOptions({maxLines: 30,
+		fontFamily: "ubuntu",
+  fontSize: "12pt"});
+    neditor.setValue( ccresult.contracts[key].yul );
+        }
+        
+        for(var key in ccresult.contracts) { 
+			
+			var tag = document.createElement("h5");
+      tag.innerHTML = "bytecode for contract: "+key+" tbd!!!";
+      container.appendChild(tag);
+			
+var tag = document.createElement("p");
+   
+tag.setAttribute("id", "editor_bytecode_"+key);
+   
+    container.appendChild(document.createElement("hr"));
+    container.appendChild(tag);
+    var neditor = ace.edit("editor_bytecode_"+key);
+   neditor.setTheme("ace/theme/solarized-light");
+    neditor.session.setMode("ace/mode/rust");
+    neditor.setOptions({maxLines: 30,
+		fontFamily: "ubuntu",
+  fontSize: "12pt"});
+    neditor.setValue( ccresult.contracts[key].bytecode );
+        }
+    
+		
+	}
+	
+	
+	
+	
+   
+    var editor = ace.edit("editor");
+    editor.setTheme("ace/theme/solarized-light");
+    editor.session.setMode("ace/mode/rust");
+    editor.setOptions({maxLines: 30,
+		fontFamily: "ubuntu",
+  fontSize: "12pt"});
+    console.log('halo');
+    console.log(editor.getValue());
+ /*   
+    var editor1 = ace.edit("editor1");
+    editor1.setTheme("ace/theme/twilight");
+    editor1.session.setMode("ace/mode/rust");
+    editor1.setOptions({maxLines: 30});
+    
+    var editor2 = ace.edit("editor2");
+    editor2.setTheme("ace/theme/twilight");
+    editor2.session.setMode("ace/mode/rust");
+    editor2.setOptions({maxLines: 30});
+    
+    var editor3 = ace.edit("editor3");
+    editor3.setTheme("ace/theme/twilight");
+    editor3.session.setMode("ace/mode/rust");
+    editor3.setOptions({maxLines: 30});
+    
+    var editor4 = ace.edit("editor4");
+    editor4.setTheme("ace/theme/twilight");
+    editor4.session.setMode("ace/mode/rust");
+    editor4.setOptions({maxLines: 30});
+    
+    window.editor = editor;
+    window.editor1 = editor1;
+    window.editor2 = editor2;
+    window.editor3 = editor3;
+    window.editor4 = editor4;
+    */
+    window.editor = editor;
+    var cButton = document.getElementById("compileButton");
+    console.log(cButton);
+    cButton.onclick=aceCompile;
+    
+    run();
+    
+</script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+</body>
+</html>
